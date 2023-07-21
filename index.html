@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Adivinanzas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding-top: 50px;
+        }
+
+        h1 {
+            color: #b30fe6;
+        }
+
+        #message {
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        #guessInput {
+            padding: 5px;
+            font-size: 16px;
+        }
+
+        #submitBtn {
+            padding: 5px 10px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Juego de Adivinanzas</h1>
+    <p>Adivina un número entre 1 y 10:</p>
+    <p id="message"></p>
+    <input type="number" id="guessInput" min="1" max="10">
+    <button id="submitBtn">Adivinar</button>
+
+    <script>
+        const secretNumber = Math.floor(Math.random() * 10) + 1;
+        let attempts = 3;
+
+        document.getElementById('submitBtn').addEventListener('click', function () {
+            const guess = parseInt(document.getElementById('guessInput').value);
+            
+            if (isNaN(guess) || guess < 1 || guess > 10) {
+                setMessage('Por favor, ingresa un número válido entre 1 y 10.', 'red');
+                return;
+            }
+
+            attempts--;
+
+            if (guess === secretNumber) {
+                setMessage(`¡Felicidades! Has adivinado el número ${secretNumber}.`, 'green');
+                document.getElementById('guessInput').disabled = true;
+                document.getElementById('submitBtn').disabled = true;
+            } else if (attempts === 0) {
+                setMessage(`¡Agotaste tus intentos! El número era ${secretNumber}.`, 'red');
+                document.getElementById('guessInput').disabled = true;
+                document.getElementById('submitBtn').disabled = true;
+            } else {
+                const hint = guess > secretNumber ? 'menor' : 'mayor';
+                setMessage(`Incorrecto. Intenta de nuevo. El número es ${hint} que ${guess}. Te quedan ${attempts} intentos.`, 'red');
+            }
+        });
+
+        function setMessage(message, color) {
+            document.getElementById('message').innerText = message;
+            document.getElementById('message').style.color = color;
+        }
+    </script>
+</body>
+</html>
